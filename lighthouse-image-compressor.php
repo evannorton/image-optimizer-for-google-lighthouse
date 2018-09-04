@@ -30,7 +30,7 @@ function lic_page() {
 }
 
 function lic_menu() {
-    add_media_page("Lighthouse Image Compressor", "Lighthouse Image Compressor", "edit_files", "lighthouse-image-compressor", "lic_page");
+    add_media_page("Lighthouse Image Compressor", "Lighthouse Image Compressor", "administrator", "lighthouse-image-compressor", "lic_page");
 }
 
 add_action("admin_menu", "lic_menu");
