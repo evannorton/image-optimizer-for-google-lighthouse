@@ -24,3 +24,13 @@ You should have received a copy of the GNU General Public License
 along with Lighthouse Image Compressor. If not, see https://www.gnu.org/licenses/gpl-2.0.html.
 
 */
+
+function lic_page() {
+    include( plugin_dir_path( __FILE__ ) . "page.php");
+}
+
+function lic_menu() {
+    add_media_page("Lighthouse Image Compressor", "Lighthouse Image Compressor", "edit_files", "lighthouse-image-compressor", "lic_page");
+}
+
+add_action("admin_menu", "lic_menu");
