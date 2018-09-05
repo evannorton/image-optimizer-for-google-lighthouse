@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="<?= plugin_dir_url( __FILE__ ) ?>styles.css">
+
 <div class="wrap">
 
     <h1>Lighthouse Image Optimizer</h1>
@@ -8,4 +10,11 @@
         <li>Upload the JSON file below and click "Optimize Images."</li>
     </ol>
 
+    <form>
+        <input type='file' name='audit' />
+        <?php submit_button("Optimize Images") ?>
+    </form>
+
 </div>
+
+<script src="<?= plugin_dir_url( __FILE__ ) ?>scripts.js"></script>
