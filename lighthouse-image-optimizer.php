@@ -30,7 +30,7 @@ function lio_page() {
 }
 
 function lio_menu() {
-    add_media_page("Lighthouse Image Optimizer", "Lighthouse Image Optimizer", "administrator", "lighthouse-image-Optimizer", "lio_page");
+    add_media_page("Lighthouse Image Optimizer", "Lighthouse Image Optimizer", "administrator", "lighthouse-image-optimizer", "lio_page");
 }
 
 add_action("admin_menu", "lio_menu");
