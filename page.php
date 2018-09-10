@@ -2,13 +2,28 @@
 
 <?php
 
-function get_img_path($file_name, $src) {
-    $base_dir = get_home_path();
-    $path = substr($src, strpos($src, "//") + 2);
-    $path = substr($path, strpos($path, "/") + 1);
-    $path = $base_dir . $path;
-    return $path;
-}
+    function none_found() {
+        echo "No unefficiently encoded images found.";
+    }
+
+    function get_img_path($file_name, $src) {
+        $base_dir = get_home_path();
+        $path = substr($src, strpos($src, "//") + 2);
+        $path = substr($path, strpos($path, "/") + 1);
+        $path = $base_dir . $path;
+        return $path;
+    }
+
+    function format_size($bytes) {
+        if ($bytes < 1000) {
+            $bytes = $bytes . " B";
+        } else if ($bytes < 1000000) {
+            $bytes = ($bytes / 1000) . " KB";
+        } else {
+            $bytes = ($bytes / 1000000) . " MB";
+        }
+        return $bytes;
+    }
 
 ?>
 
@@ -41,62 +56,99 @@ function get_img_path($file_name, $src) {
                 $audit = json_decode($audit);
                 $images = $audit->audits->{"uses-optimized-images"}->details->items;
 
-                define('WEBSERVICE', 'http://api.resmush.it/ws.php?img=');
+                if ($images) {
 
-                $optimized_list = array();
+                    define('WEBSERVICE', 'http://api.resmush.it/ws.php?img=');
 
-                $failed_upload_count = 0;
+                    $optimized_list = array();
 
-                foreach ($images as $key => $image) {
+                    $failed_upload_count = 0;
+                    $cross_origin_count = 0;
 
-                    $url = $image->url;
-                    $query_string_pos = strrpos($url, "?");
+                    foreach ($images as $key => $image) {
 
-                    if ($query_string_pos > 0) {
-                        $url = substr($url, 0, $query_string_pos);
-                    }
-
-                    $optimized = json_decode(file_get_contents(WEBSERVICE . $url));
-
-                    if (isset($optimized->error)) {
-                        $failed_upload_count++;
-                        if ($failed_upload_count == 1) {
-                            echo "<h2>Failed uploads</h2>";
+                        if ($image->isCrossOrigin) {
+                            $cross_origin_count++;
+                            continue;
                         }
-                        echo "Upload failed for " . $url . ": <b><i>" . $optimized->error_long . "</i></b>";
-                    } else {
-                        array_push($optimized_list, $optimized);
-                    }
 
-                }
+                        $url = $image->url;
+                        $query_string_pos = strrpos($url, "?");
 
-                $successful_replacement_count = 0;
+                        if ($query_string_pos > 0) {
+                            $url = substr($url, 0, $query_string_pos);
+                        }
 
-                foreach ($optimized_list as $new_img) {
+                        $optimized = json_decode(file_get_contents(WEBSERVICE . $url));
 
-                    $path = get_img_path($file_name, $new_img->src);
-
-                    unlink($path);
-                    $ch = curl_init($new_img->dest);
-                    $fp = fopen($path, 'wb');
-                    curl_setopt($ch, CURLOPT_FILE, $fp);
-                    curl_setopt($ch, CURLOPT_HEADER, 0);
-                    curl_exec($ch);
-
-                    $result_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-                    if ($result_status == 200) {
-                        $successful_replacement_count++;
-                        if ($successful_replacement_count == 1) {
-                            echo "<h2>Successfully compressed and replaced</h2>";
+                        if (isset($optimized->error)) {
+                            $failed_upload_count++;
+                            if ($failed_upload_count == 1) {
+                                echo "<h2>Failed uploads</h2>";
+                            } else {
+                                echo "<br>";
+                            }
+                            echo "Upload failed for " . $url . ": <b><i>" . $optimized->error_long . "</i></b>";
                         } else {
-                            echo "<br>";
+                            array_push($optimized_list, $optimized);
                         }
-                        echo($path);
+
                     }
 
-                    curl_close($ch);
-                    fclose($fp);
+                    if (count($images) == 0 || ($cross_origin_count == count($images))) {
+                        none_found();
+                    } else {
 
+                        $successful_replacement_count = 0;
+
+                        foreach ($optimized_list as $new_img) {
+
+                            $path = get_img_path($file_name, $new_img->src);
+
+                            if (!file_exists($path)) {
+                                continue;
+                            }
+
+                            $original_size = $new_img->src_size;
+                            $compressed_size = $new_img->dest_size;
+                            $size_reduced = $original_size - $compressed_size;
+                            $percent_reduced = round((1 - ($compressed_size / $original_size)) * 100, 2) . "%";
+                            $original_size = format_size($original_size);
+                            $compressed_size = format_size($compressed_size);
+
+                            unlink($path);
+
+                            $ch = curl_init($new_img->dest);
+                            $fp = fopen($path, 'wb');
+                            curl_setopt($ch, CURLOPT_FILE, $fp);
+                            curl_setopt($ch, CURLOPT_HEADER, 0);
+                            curl_exec($ch);
+
+                            $result_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+                            if ($result_status == 200) {
+                                $successful_replacement_count++;
+                                if ($successful_replacement_count == 1) {
+                                    echo "<h2>Successfully compressed and replaced</h2>";
+                                } else {
+                                    echo "<br>";
+                                }
+                                echo($path . " - <b><i>" . $percent_reduced . " size reduction (" . $original_size . " -> " . $compressed_size . ")</i></b>");
+                            }
+
+                            curl_close($ch);
+                            fclose($fp);
+
+                        }
+
+                        if ($successful_replacement_count == 0 && $failed_upload_count == 0) {
+                            none_found();
+                        }
+
+                    }
+
+                } else {
+                    none_found();
                 }
 
             }
