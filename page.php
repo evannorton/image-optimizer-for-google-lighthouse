@@ -1,12 +1,14 @@
-<link rel="stylesheet" href="<?= plugin_dir_url( __FILE__ ) ?>styles.css">
+<link rel="stylesheet" href="<?= plugin_dir_url(__FILE__) ?>styles.css">
 
 <?php
 
-    function lio_none_found() {
+    function lio_none_found()
+    {
         echo "No unefficiently encoded images found.";
     }
 
-    function lio_get_img_path($file_name, $src) {
+    function lio_get_img_path($file_name, $src)
+    {
         $base_dir = get_home_path();
         $path = substr($src, strpos($src, "//") + 2);
         $path = substr($path, strpos($path, "/") + 1);
@@ -14,10 +16,11 @@
         return $path;
     }
 
-    function lio_format_size($bytes) {
+    function lio_format_size($bytes)
+    {
         if ($bytes < 1000) {
             $bytes = round($bytes, 2) . " B";
-        } else if ($bytes < 1000000) {
+        } elseif ($bytes < 1000000) {
             $bytes = round(($bytes / 1000), 2) . " KB";
         } else {
             $bytes =round(($bytes / 1000000), 2) . " MB";
@@ -25,16 +28,15 @@
         return $bytes;
     }
 
-    function lio_handle_form() {
+    function lio_handle_form()
+    {
         if (isset($_POST["submit"])) {
-
             $audit = $_FILES["audit"]["tmp_name"];
             $audit = file_get_contents($audit);
             $audit = json_decode($audit);
             $images = $audit->audits->{"uses-optimized-images"}->details->items;
 
             if ($images) {
-
                 define('WEBSERVICE', 'http://api.resmush.it/ws.php?img=');
 
                 $optimized_list = array();
@@ -43,7 +45,6 @@
                 $cross_origin_count = 0;
 
                 foreach ($images as $key => $image) {
-
                     if ($image->isCrossOrigin) {
                         $cross_origin_count++;
                         continue;
@@ -69,17 +70,14 @@
                     } else {
                         array_push($optimized_list, $optimized);
                     }
-
                 }
 
                 if (count($images) == 0 || ($cross_origin_count == count($images))) {
                     lio_none_found();
                 } else {
-
                     $successful_replacement_count = 0;
 
                     foreach ($optimized_list as $new_img) {
-
                         $path = lio_get_img_path($file_name, $new_img->src);
 
                         if (!file_exists($path)) {
@@ -115,19 +113,15 @@
 
                         curl_close($ch);
                         fclose($fp);
-
                     }
 
                     if ($successful_replacement_count == 0 && $failed_upload_count == 0) {
                         lio_none_found();
                     }
-
                 }
-
             } else {
                 lio_none_found();
             }
-
         }
     }
 
@@ -141,8 +135,13 @@
         <h2>Optimize and replace bloated images</h2>
 
         <ol>
-            <li>Run <a href="https://developers.google.com/web/tools/lighthouse/" target="__blank">Lighthouse</a> on the page of your website you want to optimize images. The easiest way  to do this is <a href="https://developers.google.com/web/tools/lighthouse/#devtools">using Chrome Developer Tools</a>, but you may also utilize the <a   href="https://developers.google.com/web/tools/lighthouse/#extension" target="__blank">Lighthouse Chrome Extension</a> or <a   href="https://developers.google.com/web/tools/lighthouse/#cli" target="__blank">run an audit on the command line using Node</a>.</li>
-            <li><a href="https://developers.google.com/web/tools/lighthouse/#json" target="__blank">Download the report as a JSON file.</a></li>
+            <li>Run <a href="https://developers.google.com/web/tools/lighthouse/" target="__blank">Lighthouse</a> on
+                the page of your website you want to optimize images. The easiest way to do this is <a href="https://developers.google.com/web/tools/lighthouse/#devtools">using
+                    Chrome Developer Tools</a>, but you may also utilize the <a href="https://developers.google.com/web/tools/lighthouse/#extension"
+                    target="__blank">Lighthouse Chrome Extension</a> or <a href="https://developers.google.com/web/tools/lighthouse/#cli"
+                    target="__blank">run an audit on the command line using Node</a>.</li>
+            <li><a href="https://developers.google.com/web/tools/lighthouse/#json" target="__blank">Download the report
+                    as a JSON file.</a></li>
             <li>Upload the JSON file below and click "Optimize Images."</li>
         </ol>
 
@@ -161,4 +160,4 @@
 
 </div>
 
-<script src="<?= plugin_dir_url( __FILE__ ) ?>scripts.js"></script>
+<script src="<?= plugin_dir_url(__FILE__) ?>scripts.js"></script>

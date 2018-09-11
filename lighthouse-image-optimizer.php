@@ -25,11 +25,13 @@ along with Lighthouse Image Optimizer. If not, see https://www.gnu.org/licenses/
 
 */
 
-function lio_page() {
-    include( plugin_dir_path( __FILE__ ) . "page.php");
+function lio_page()
+{
+    include plugin_dir_path(__FILE__) . "page.php";
 }
 
-function lio_menu() {
+function lio_menu()
+{
     add_media_page("Lighthouse Image Optimizer", "Lighthouse Image Optimizer", "administrator", "lighthouse-image-optimizer", "lio_page");
 }
 
