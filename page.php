@@ -145,10 +145,12 @@
             <li>Upload the JSON file below and click "Optimize Images."</li>
         </ol>
 
+        <p><b>NOTE: This plugin is not compatible with Wordpress sites running on localhost. Deploy to a staging environment before using Lighthouse Image Optimizer.</b></p>
+
         <form enctype="multipart/form-data" action="" method="post">
 
             <input type="file" accept=".json" name="audit" />
-            <?php submit_button("Optimize Images") ?>
+            <?php submit_button("Optimize images") ?>
 
         </form>
 
