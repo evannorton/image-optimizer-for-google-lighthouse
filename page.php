@@ -7,7 +7,7 @@
         echo "No unefficiently encoded images found.";
     }
 
-    function lio_get_img_path($file_name, $src)
+    function lio_get_img_path($src)
     {
         $base_dir = get_home_path();
         $path = substr($src, strpos($src, "//") + 2);
@@ -78,7 +78,7 @@
                     $successful_replacement_count = 0;
 
                     foreach ($optimized_list as $new_img) {
-                        $path = lio_get_img_path($file_name, $new_img->src);
+                        $path = lio_get_img_path($new_img->src);
 
                         if (!file_exists($path)) {
                             continue;
