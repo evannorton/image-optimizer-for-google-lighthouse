@@ -9,7 +9,6 @@ Author URI:   https://github.com/evannorton
 License:      GPL2
 License URI:  https://www.gnu.org/licenses/gpl-2.0.html
 
-
 Lighthouse Image Optimizer is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 2 of the License, or
@@ -23,7 +22,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Lighthouse Image Optimizer. If not, see https://www.gnu.org/licenses/gpl-2.0.html.
 
-*/
+ */
 
 function lio_page()
 {

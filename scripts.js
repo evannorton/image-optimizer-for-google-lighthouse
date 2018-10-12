@@ -1,7 +1,7 @@
 (function ($) {
-    
-    $(document).ready(function() {
-        $($("form")[0]).submit(function(e) {
+
+    $(document).ready(function () {
+        $($("form")[0]).submit(function (e) {
             let val = $("form")[0][0].value;
             if (!val) {
                 e.preventDefault();

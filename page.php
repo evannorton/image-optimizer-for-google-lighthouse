@@ -24,7 +24,7 @@
         } elseif ($bytes < 1000000) {
             $bytes = round(($bytes / 1000), 2) . " KB";
         } else {
-            $bytes =round(($bytes / 1000000), 2) . " MB";
+            $bytes = round(($bytes / 1000000), 2) . " MB";
         }
         return $bytes;
     }
@@ -109,7 +109,7 @@
                             } else {
                                 echo "<br>";
                             }
-                            echo($path . " - <b><i>" . $percent_reduced . " size reduction (" . $original_size . " -> " . $compressed_size . ")</i></b>");
+                            echo ($path . " - <b><i>" . $percent_reduced . " size reduction (" . $original_size . " -> " . $compressed_size . ")</i></b>");
                         }
 
                         curl_close($ch);
@@ -151,7 +151,7 @@
         <form enctype="multipart/form-data" action="" method="post">
 
             <input type="file" accept=".json" name="audit" />
-            <?php submit_button("Optimize images") ?>
+            <?php submit_button("Optimize images")?>
 
         </form>
 
