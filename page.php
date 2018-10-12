@@ -1,6 +1,7 @@
-<link rel="stylesheet" href="<?= plugin_dir_url(__FILE__) ?>styles.css">
-
 <?php
+
+    wp_enqueue_style("lio-styles", plugin_dir_url(__FILE__) . "styles.css");
+    wp_enqueue_script("lio-scripts", plugin_dir_url(__FILE__) . "scripts.js");
 
     function lio_none_found()
     {
@@ -161,5 +162,3 @@
     </div>
 
 </div>
-
-<script src="<?= plugin_dir_url(__FILE__) ?>scripts.js"></script>
