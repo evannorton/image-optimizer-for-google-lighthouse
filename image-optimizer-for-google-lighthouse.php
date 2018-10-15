@@ -9,29 +9,29 @@ Author URI:   https://github.com/evannorton
 License:      GPL2
 License URI:  https://www.gnu.org/licenses/gpl-2.0.html
 
-Lighthouse Image Optimizer is free software: you can redistribute it and/or modify
+Image Optimizer for Google Lighthouse is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 2 of the License, or
 any later version.
 
-Lighthouse Image Optimizer is distributed in the hope that it will be useful,
+Image Optimizer for Google Lighthouse is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with Lighthouse Image Optimizer. If not, see https://www.gnu.org/licenses/gpl-2.0.html.
+along with Image Optimizer for Google Lighthouse. If not, see https://www.gnu.org/licenses/gpl-2.0.html.
 
  */
 
-function lio_page()
+function iofgl_page()
 {
     include plugin_dir_path(__FILE__) . "page.php";
 }
 
-function lio_menu()
+function iofgl_menu()
 {
-    add_media_page("Lighthouse Image Optimizer", "Lighthouse Image Optimizer", "administrator", "lighthouse-image-optimizer", "lio_page");
+    add_media_page("Image Optimizer for Google Lighthouse", "Image Optimizer for Google Lighthouse", "administrator", "image-optimizer-for-google-lighthouse", "iofgl_page");
 }
 
-add_action("admin_menu", "lio_menu");
+add_action("admin_menu", "iofgl_menu");
